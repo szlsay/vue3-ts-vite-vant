@@ -1,21 +1,11 @@
 <script setup lang="ts">
-  import {reactive} from 'vue'
-  import MessageList from '@/components/list/MessageList.vue'
-  import FooterTabbar from '@/components/FooterTabbar.vue'
-  import {messageStore} from '@/store/message'
-  const leftBack = () => history.back();
-  const store = messageStore()
-  store.getSystemMessageList()
+
 </script>
+
 <template>
-  <van-nav-bar title="系统消息" left-arrow @click-left="leftBack"/>
-  <dl>
-    <dt v-for="(item,index) in store.systemMessageList" :key="index" >
-        <h3>{{item.title}}<span>{{item.specific_time}}</span></h3>
-        <p>{{item.content}}</p>
-        <router-link :to="'/message/systemDetails/'+item.id">点击查看 ></router-link>
-    </dt>
-  </dl>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
   dl{

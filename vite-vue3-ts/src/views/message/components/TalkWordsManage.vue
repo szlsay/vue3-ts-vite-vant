@@ -1,81 +1,11 @@
 <script setup lang="ts">
-    import {reactive,inject,provide} from 'vue'
-    import {chatMessageWordsList,chatMessageWordsDelete} from '@/api/message'
-    import TalkWordsAdd from './TalkWordsAdd.vue'
-    import { Toast } from 'vant';
-    const {closeWorksManage} = inject('popup')
-    const state = reactive({
-        loading: false,
-        list: [],
-        value: '',
-        editId: '',
-        text: '',
-        title: '',
-        addBool: false
-    })
-    const getChatMessageWordsList = async () => {
-        state.loading = true
-        const res = await chatMessageWordsList({})
-        if(res){
-            state.list = res.data
-        }else{
-            Toast(res.msg)
-        }
-        state.loading = false
-    }
-    getChatMessageWordsList()
-    const submitDelete = async (id) => {
-        state.loading = true
-        const res = await chatMessageWordsDelete({
-            id: id
-        })
-        if(res){
-            getChatMessageWordsList()
-        }
-        Toast(res.msg)
-        state.loading = false
-    }
-    const editChange = (id,text) => {
-        state.editId = id
-        state.text = text
-        state.title = '修改常用语'
-        state.addBool = true
-    }
-    const addChange = () => {
-        state.editId = ''
-        state.text = ''
-        state.title = '添加常用语'
-        state.addBool = true
-    }
-    const closeWorksAdd = () => {
-        state.addBool = false
-        getChatMessageWordsList()
-    }
-    provide('popup',{
-        closeWorksAdd
-    })
+
 </script>
+
 <template>
-    <van-nav-bar title="管理常用语" left-arrow @click-left="closeWorksManage" />
-    <div class="manage-list">
-        <van-swipe-cell  v-for="(item,index) in state.list" :key="index">
-            <div class="item">
-                <p>{{item.text}}</p>
-                <div>
-                    <img src="@/assets/img/icon/icon-edit.png" />
-                    <span @click="editChange(item.id,item.text)">编辑</span>
-                </div>
-            </div>
-            <template #right>
-                <img @click="submitDelete(item.id)" src="@/assets/img/icon/icon-delete.png" class="delete" />
-            </template>
-        </van-swipe-cell>
-    </div>
-    <button @click="addChange" class="add">添加常用语</button>
-    <!--常用语添加弹窗-->
-    <van-popup v-model:show="state.addBool" position="top" duration="0" :style="{ width: '100%',height: '100%' }">
-        <TalkWordsAdd :title="state.title" :id="state.editId" :text="state.text"></TalkWordsAdd>
-    </van-popup>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
 >>> .van-swipe-cell__right{

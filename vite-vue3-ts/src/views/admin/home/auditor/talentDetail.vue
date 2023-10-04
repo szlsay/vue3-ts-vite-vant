@@ -1,88 +1,12 @@
 <script setup lang="ts">
-    import {reactive} from 'vue'
-    import {adminAuditorTalentDetail,adminAuditorTalentEdit} from '@/api/admin'
-    import { Toast } from 'vant';
-    import Tabs from '@/components/Tabs.vue'
-    import ProgressBar from '@/components/ProgressBar.vue'
-    import {useRouter} from 'vue-router'
-    const router = useRouter()
-    const id = router.currentRoute.value.params.id
-    const leftBack = () => history.back();
-    const state = reactive({
-        loading: false,
-        item: {}
-    })
-    const auditorEdit = async (type) => {
-        const res = await adminAuditorTalentEdit({
-            "user_id": id,
-            "is_check": type
-        })
-        if(res){
-            Toast('操作成功')
-            leftBack()
-        }
-    }
-    const auditorEditPass = () => {
-        auditorEdit(1)
-    }
-    const auditorEditFail = () => {
-        auditorEdit(2)
-    }
-    const getDetail = async () => {
-        state.loading = true
-        const res = await adminAuditorTalentDetail({
-            id: id
-        })
-        if(res){
-            state.item = res
-        }else{
-            Toast(res.msg)
-        }
-        state.loading = false
-    } 
-    getDetail()
+
 </script>
+
 <template>
-    <van-nav-bar title="个人信息" left-arrow @click-left="leftBack"/>
-    <dl>
-        <dt>
-            <label>姓 名</label>
-            <span>{{state.item.real_name}}</span>
-        </dt>
-        <dt>
-            <label>性 别</label>
-            <span>{{state.item.sex}}</span>
-        </dt>
-        <dt>
-            <label>年 龄</label>
-            <span>{{state.item.age}}</span>
-        </dt>
-        <dt>
-            <label>工 龄</label>
-            <span>{{state.item.work_year}}</span>
-        </dt>
-        <dt>
-            <label>城 市</label>
-            <span>{{state.item.city}}</span>
-        </dt>
-        <dt>
-            <label>证 件 号</label>
-            <span>{{state.item.idcard}}</span>
-        </dt>
-        <dt>
-            <p>{{state.item.task_ask}}</p>
-        </dt>
-        <dd>
-            <img :src="state.item.idCard_just" />
-            <img :src="state.item.idCard_back" />
-        </dd>
-    </dl>
-    <div class="detail-btn">
-        <button v-debounce="auditorEditPass">审核通过</button>
-        <button v-debounce="auditorEditFail">审核失败</button>
-    </div>
-</template>
-<style scoped>
+  <div>
+    登录页
+  </div>
+</template><style scoped>
 dl{
     padding: 0.64rem;
 }

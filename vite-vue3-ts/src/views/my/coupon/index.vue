@@ -1,61 +1,11 @@
 <script setup lang="ts">
-import {reactive} from 'vue'
-import {couponList,addMycoupon} from '@/api/my'
-import { Toast } from 'vant'
-const state = reactive({
-    list: []
-})
-const leftBack = () => history.back()
-const getCouponList = async () => {
-    const res = await couponList()
-    if(res){
-        state.list = res.data
-    }
-}
-const couponSubmit = async (item) => {
-    const res = await addMycoupon({
-        "experience_id": item.id,
-        "experience_days": item.experience_days
-    })
-    if(res){
-        Toast('领取成功')
-        getCouponList()
-    }else{
-        Toast('领取失败')
-    }
-}
-getCouponList()
+
 </script>
+
 <template>
-    <div class="coupon-page">
-        <van-nav-bar left-arrow title="我的体验金" @click-left="leftBack">
-            <template #right>
-                <router-link to="/my/coupon/rule"><van-icon>使用规则</van-icon></router-link>
-            </template>
-        </van-nav-bar>
-        <img src="@/assets/img/my/coupon/banner.png" />
-        <dl>
-            <dt v-for="(item,index) in state.list" :key="index" :class="item.is_check == 2||item.is_check==3?'link':'active'">
-                <div class="list-coupon-left">
-                    <strong>{{item.price}}</strong>
-                    <span>体验金</span>
-                </div>
-                <div class="list-coupon-center">
-                    <h5>{{item.title}}</h5>
-                    <p v-if="item.is_check == null">有效期：{{item.experience_days}}天</p>
-                    <p v-else>有效期至：{{item.effective_days}}</p>
-                </div>
-                <div class="list-coupon-right">
-                    <button v-if="item.is_check == null" @click="couponSubmit(item)">领取</button>
-                    <router-link to="/my/coupon/rule"><button v-if="item.is_check == 1" class="btn-type-2">去使用</button></router-link>
-                    <button v-if="item.is_check == 2 || item.is_check == 3" class="btn-type-3">去使用</button>
-                    <i v-if="item.is_check ==2 || item.is_check == 3"></i>
-                    <em v-if="item.is_check == 2">已使用</em>
-                    <em v-if="item.is_check == 3">已过期</em>
-                </div>
-            </dt>
-        </dl>
-    </div>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
     .coupon-page{

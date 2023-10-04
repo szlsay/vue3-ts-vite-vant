@@ -1,55 +1,11 @@
 <script setup lang="ts">
-    import { inject,reactive } from 'vue';
-    import { screenList } from '@/api/task';
-    import { taskStore } from '@/store/task'
-    import { Toast } from 'vant';
-    const { closeScreen } = inject('popup')
-    const store = taskStore()
-    const state = reactive({
-        mode: '',
-        cycle: ''
-    })
-    const leftBack = () => closeScreen();
-    const modeChange = (name) => {
-        state.mode = name
-    }
-    const cycleChange = (name) => {
-        state.cycle = name
-    }
-    const clearScreen = () => {
-        state.mode = ''
-        state.cycle = ''
-    }
-    const getScreenList = async () => {
-        const res = await screenList()
-        if(res){
-            store.setScreenList(res.data)
-        }else{
-            Toast(res.msg)
-        }
-    }
-    if(!store.screenList.serviceMode) getScreenList()
+
 </script>
+
 <template>
-    <van-nav-bar title="筛选" left-arrow @click-left="leftBack">
-        <template #left>
-            <van-icon name="cross" size="18" />
-        </template>
-    </van-nav-bar>
-    <div class="task-screen">
-        <h3>服务方式</h3>
-        <div class="screen-item">
-            <span :class="state.mode==item?'active':''" v-for="(item, index) in store.screenList.serviceMode" :key="index" @click="modeChange(item)">{{item}}</span>
-        </div>
-        <h3>任务周期</h3>
-        <div class="screen-item">
-            <span :class="state.cycle==item?'active':''" v-for="(item, index) in store.screenList.taskCycle" :key="index" @click="cycleChange(item)">{{item}}</span>
-        </div>
-    </div>
-    <div class="screen-footer">
-        <button class="screen-clear" @click="clearScreen">清除</button>
-        <van-button type="primary" block @click="closeScreen(state)">确定</van-button>
-    </div>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
     .task-screen{

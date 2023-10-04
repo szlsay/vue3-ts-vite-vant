@@ -1,66 +1,11 @@
-<script lang="ts" setup>
-    import { reactive } from 'vue';
-    import { useRouter } from 'vue-router';
-    import {myTaskAllList} from '@/api/task'
-    const router = useRouter()
-    const leftBack = () => history.back()
-    const state = reactive({
-        loading: false,
-        list: [],
-        cur: 0
-    })
-    const tabs = [
-        {
-            type: 0,
-            text: '审核中'
-        },
-        {
-            type: 1,
-            text: '已开启'
-        },
-        {
-            type: 2,
-            text: '已下架'
-        },
-        {
-            type: 3,
-            text: '已关闭'
-        }
-    ]
-    const gotoDetail = (id) => {
-        router.push('/my/task/details/'+id)
-    }
-    const getTabList = async (type) => {
-        state.list = []
-        state.cur = type
-        state.loading = true
-        const res = await myTaskAllList({
-            type: type
-        })
-        if(res){
-            state.list = res.records
-        }
-        state.loading = false
-    }
-    getTabList(0)
+<script setup lang="ts">
+
 </script>
+
 <template>
-    <van-nav-bar title="任务管理" left-arrow @click-left="leftBack"/>
-    <div class="task-contract-tab">
-        <span v-for="(item,index) in tabs" :class="state.cur==item.type?'active':''" :key="index" @click="getTabList(item.type)">{{item.text}}<i></i></span>
-    </div>
-    <div class="task-contract-list">
-        <div class="wy-no-data" v-if="!state.loading && state.list.length==0">暂无数据</div>
-        <van-loading v-if="state.loading">加载中...</van-loading>
-        <div class="task-contract-item" v-for="(item,index) in state.list" :key="index" @click="gotoDetail(item.task_id)">
-            <h2>
-                <label>{{item.task_name}}</label>
-                <span>{{item.is_check_text}}</span>
-            </h2>
-            <p>{{item.task_budget}} ｜ {{item.task_cycle}}天 ｜ {{item.service_mode}}</p>
-        </div>
-    </div>
-    <router-link to="/my/task/add"><button class="wy-submit">新建任务</button></router-link>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
     .task-contract-tab{

@@ -1,87 +1,12 @@
 <script setup lang="ts">
-    import {reactive} from 'vue'
-    import {adminAuditorTaskDetail,adminAuditorTaskEdit} from '@/api/admin'
-    import { Toast } from 'vant';
-    import Tabs from '@/components/Tabs.vue'
-    import ProgressBar from '@/components/ProgressBar.vue'
-    import {useRouter} from 'vue-router'
-    const router = useRouter()
-    const id = router.currentRoute.value.params.id
-    const leftBack = () => history.back();
-    const state = reactive({
-        loading: false,
-        item: {}
-    })
-    const auditorEdit = async (type) => {
-        const res = await adminAuditorTaskEdit({
-            "task_id": id,
-            "is_check": type
-        })
-        if(res){
-            Toast('操作成功')
-            leftBack()
-        }
-    }
-    const auditorEditPass = () => {
-        auditorEdit(1)
-    }
-    const auditorEditFail = () => {
-        auditorEdit(2)
-    }
-    const auditorEditClose = () => {
-        auditorEdit(3)
-    }
-    const getDetail = async () => {
-        state.loading = true
-        const res = await adminAuditorTaskDetail({
-            id: id
-        })
-        if(res){
-            state.item = res
-        }else{
-            Toast(res.msg)
-        }
-        state.loading = false
-    } 
-    getDetail()
+
 </script>
+
 <template>
-    <van-nav-bar title="任务详情" left-arrow @click-left="leftBack"/>
-    <dl>
-        <dt>
-            <label>任务名称</label>
-            <span>{{state.item.task_name}}</span>
-        </dt>
-        <dt>
-            <label>任务预算</label>
-            <span>{{state.item.task_budget}}元</span>
-        </dt>
-        <dt>
-            <label>任务周期</label>
-            <span>{{state.item.task_cycle}}天</span>
-        </dt>
-        <dt>
-            <label>服务方式</label>
-            <span>{{state.item.service_mode}}</span>
-        </dt>
-        <dt>
-            <label>任务来源</label>
-            <span>{{state.item.company_name}}</span>
-        </dt>
-        <dt>
-            <label>任务需求</label>
-        </dt>
-        <dt>
-            <p>{{state.item.task_ask}}</p>
-        </dt>
-    </dl>
-    <div class="detail-btn">
-        <button v-debounce="auditorEditPass">审核通过</button>
-        <button v-debounce="auditorEditFail">审核失败</button>
-        <button v-debounce="auditorEditClose">关闭任务</button>
-    </div>
-</template>
-<style scoped>
+  <div>
+    登录页
+  </div>
+</template><style scoped>
 dl{
     padding: 0.64rem;
 }

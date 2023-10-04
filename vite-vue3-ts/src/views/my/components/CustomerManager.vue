@@ -1,37 +1,10 @@
 <script setup lang="ts">
-  import useClipboard from 'vue-clipboard3'
-  import {Toast} from 'vant'
-  const props = defineProps({
-    item: {
-        type: Object
-    }
-  })
-  const emits = defineEmits(['back'])
-  const { toClipboard } = useClipboard()
-  const shareLink = () => {
-    toClipboard(props.item.manage_name)
-    Toast('复制成功')
-  }
+
 </script>
+
 <template>
-  <div class="manager-popup">
-    <div class="manager-top">
-        <img :src="props.item.manage_it_head" />
-        <p>客户经理</p>
-    </div>
-    <dl>
-        <dd>
-            <label>电话：</label>
-            <span>{{props.item.manage_name}}</span>
-            <strong @click="shareLink">复制</strong>
-        </dd>
-        <dd>
-            <label>微信：</label>
-            <span>{{props.item.manage_name}}</span>
-            <strong @click="shareLink">复制</strong>
-        </dd>
-    </dl>
-    <button @click="emits('back')">返回</button>
+  <div>
+    登录页
   </div>
 </template>
 <style scoped>

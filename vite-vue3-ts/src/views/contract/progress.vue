@@ -1,94 +1,12 @@
 <script setup lang="ts">
-    import { reactive,provide } from 'vue';
-    import { useRouter } from 'vue-router';
-    import { contractDetail } from '@/api/contract';
-    import ProgressBar from '@/components/ProgressBar.vue'
-    import ProgressEvaluation from './components/ProgressEvaluation.vue'
-    import { Toast } from 'vant';
-    import {userStore} from '@/store/user'
-    const store = userStore()
-    const router = useRouter()
-    const contractId = router.currentRoute.value.params.id
-    const state = reactive({
-        item: '',
-        num: '',
-        evaluationBoll: false,
-        loading: false
-    })
-    const leftBack = () => history.back();
-    const gotoProgress = () => {
-        router.push('/contract/progress/'+ state.item.contract_id)
-    }
-    const getContractDetail = async () => {
-        state.loading = true
-        const res = await contractDetail({
-            id: contractId
-        })
-        if(res){
-            state.item = res.records[0]
-        }else{
-            Toast(res.msg)
-        }
-        state.loading = false
-    }
-    const evaluation = (num) => {
-        state.num = num
-        state.evaluationBoll = true
-    }
-    const closeEvaluation = (bool) => {
-        if(bool){
-            getContractDetail()
-        }
-        state.evaluationBoll = false
-    }
-    getContractDetail()
-    provide('popup',{
-        closeEvaluation
-    })
+
 </script>
+
 <template>
-    <van-nav-bar title="合约进度" left-arrow @click-left="leftBack"/>
-    <div v-if="state.item">
-        <h3>{{state.item.contract_name}}</h3>
-        <div class="progress-bar">
-            <ProgressBar :item="state.item"></ProgressBar>
-            <div class="progress-bar-text">
-                <span>第一阶段</span>
-                <span>第二阶段</span>
-                <span>第三阶段</span>
-                <span>第四阶段</span>
-            </div>
-        </div>
-        <dl>
-            <dt>
-                <h4>第一阶段开发进度评估<span v-if="state.item.contract_I_state==-1 && store.role!=3">暂无评估</span>
-                <span class="active" v-if="state.item.contract_I_state==-1 && store.role==3" @click="evaluation(1)">去评估</span></h4>
-                <p v-if="state.item.contract_I_stage">{{state.item.contract_I_stage}}</p>
-            </dt>
-            <dt>
-                <h4>第二阶段开发进度评估<span v-if="state.item.contract_II_state==-1 && store.role!=3">暂无评估</span>
-                <span class="active" v-if="state.item.contract_II_state==-1 && store.role==3" @click="evaluation(2)">去评估</span></h4>
-                <p v-if="state.item.contract_II_stage">{{state.item.contract_II_stage}}</p>
-            </dt>
-            <dt>
-                <h4>第三阶段开发进度评估<span v-if="state.item.contract_III_state==-1 && store.role!=3">暂无评估</span>
-                <span class="active" v-if="state.item.contract_III_state==-1 && store.role==3" @click="evaluation(3)">去评估</span></h4>
-                <p v-if="state.item.contract_III_stage">{{state.item.contract_III_stage}}</p>
-            </dt>
-            <dt>
-                <h4>第四阶段开发进度评估<span v-if="state.item.contract_IIII_state==-1 && store.role!=3">暂无评估</span>
-                <span class="active" v-if="state.item.contract_IIII_state==-1 && store.role==3" @click="evaluation(4)">去评估</span></h4>
-                <p v-if="state.item.contract_IIII_stage">{{state.item.contract_IIII_stage}}</p>
-            </dt>   
-        </dl>
-    </div>
-    <van-loading v-if="!state.item">加载中...</van-loading>
-    <!--进度弹窗-->
-    <van-popup v-model:show="state.evaluationBoll" position="top" duration="0" :style="{ width: '100%',height: '100%' }">
-        <ProgressEvaluation :num="state.num" :id="contractId"></ProgressEvaluation>
-    </van-popup>
-</template>
-<style scoped>
+  <div>
+    登录页
+  </div>
+</template><style scoped>
 h3{
     font-size: 0.8rem;
     line-height: 0.8rem;

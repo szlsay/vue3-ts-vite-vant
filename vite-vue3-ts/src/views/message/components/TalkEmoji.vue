@@ -1,13 +1,11 @@
 <script setup lang="ts">
-    import {inject} from 'vue'
-    const {emojiChange} = inject('popup')
-    const list = ['😀','😁','😂','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','😗','😙','😚','😇','😐','😑','😶','😏']
 
 </script>
+
 <template>
-    <div>
-        <span @click="emojiChange(item)" v-for="(item,index) in list" :key="index">{{item}}</span>
-    </div>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
 div{

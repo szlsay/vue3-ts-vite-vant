@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import SwitchList from '../components/SwitchList.vue'
-  const leftBack = () => history.back()
+
 </script>
+
 <template>
-  <van-nav-bar title="切换身份" left-arrow @click-left="leftBack"/>
-  <div class="switch-page">
-    <SwitchList></SwitchList>
+  <div>
+    登录页
   </div>
 </template>
 <style scoped>

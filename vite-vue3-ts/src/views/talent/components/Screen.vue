@@ -1,64 +1,11 @@
 <script setup lang="ts">
-    import { inject,reactive } from 'vue';
-    import { getScreenl } from '@/api/talent';
-    import { talentStore } from '@/store/talent'
-    import { Toast } from 'vant';
-    const { closeScreen } = inject('popup')
-    const store = talentStore()
-    const state = reactive({
-        highest: '',
-        salary: '',
-        experience: ''
-    })
-    const leftBack = () => closeScreen();
-    const highestChange = (name) => {
-        state.highest = name
-    }
-    const salaryChange = (name) => {
-        state.salary = name
-    }
-    const experienceChange = (name) => {
-        state.experience = name
-    }
-    const clearScreen = () => {
-        state.highest = ''
-        state.salary = ''
-        state.experience = ''
-    }
-    const getScreenList = async () => {
-        const res = await getScreenl()
-        if(res){
-            store.setScreen(res.data)
-        }else{
-            Toast(res.msg)
-        }
-    }
-    if(!store.highestList.length) getScreenList()
+
 </script>
+
 <template>
-    <van-nav-bar title="筛选" left-arrow @click-left="leftBack">
-        <template #left>
-            <van-icon name="cross" size="18" />
-        </template>
-    </van-nav-bar>
-    <div class="task-screen">
-        <h3>学历要求</h3>
-        <div class="screen-item">
-            <span :class="state.highest==item?'active':''" v-for="(item, index) in store.highestList" :key="index" @click="highestChange(item)">{{item.value}}</span>
-        </div>
-        <h3>薪资待遇</h3>
-        <div class="screen-item">
-            <span :class="state.salary==item?'active':''" v-for="(item, index) in store.salaryList" :key="index" @click="salaryChange(item)">{{item}}</span>
-        </div>
-        <h3>经验要求</h3>
-        <div class="screen-item">
-            <span :class="state.experience==item?'active':''" v-for="(item, index) in store.experienceList" :key="index" @click="experienceChange(item)">{{item.value}}</span>
-        </div>
-    </div>
-    <div class="screen-footer">
-        <button class="screen-clear" @click="clearScreen">清除</button>
-        <van-button type="primary" block @click="closeScreen(state)">确定</van-button>
-    </div>
+  <div>
+    登录页
+  </div>
 </template>
 <style scoped>
     .task-screen{

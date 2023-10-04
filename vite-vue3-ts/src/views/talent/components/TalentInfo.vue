@@ -1,48 +1,12 @@
 <script setup lang="ts">
-  const props = defineProps({
-    item: {
-      type: Object
-    }
-  })
-  const arrayList = (str) => {
-      if(str){
-          return str.split(',')
-      }else{
-          return []
-      }
-  }
+
 </script>
+
 <template>
-  <div class="talent-info">
-    <div class="info-left">
-        <img :src="item.it_head" />
-        <span>精选人才</span>
-    </div>
-    <div class="info-right">
-        <h3>{{item.user_name}} <span  v-for="(child, index) in arrayList(item.service_mode)" :key="index">{{child}}</span></h3>
-        <p>{{item.position_name}} ｜ {{item.sex===1?'男':'女'}}</p>
-        <dl>
-            <dt>
-                <h5>{{item.work_year}}</h5>
-                <span>经验</span>
-            </dt>
-            <dt>
-                <h5>{{item.age}}</h5>
-                <span>年龄</span>
-            </dt>
-            <dt>
-                <h5>{{item.porjectNum}}个</h5>
-                <span>项目</span>
-            </dt>
-        </dl>
-    </div>
+  <div>
+    登录页
   </div>
-  <p class="info-text">{{item.advantage}}</p>
-  <dl class="info-skill">
-    <dt v-for="(child, index) in arrayList(item.skill_ids)" :key="index">{{child}}</dt>
-  </dl>
-</template>
-<style scoped>
+</template><style scoped>
   .talent-info{
     padding: 1.23rem 1.33rem;
     background: #FFFFFF;

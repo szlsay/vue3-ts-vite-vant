@@ -1,30 +1,10 @@
 <script setup lang="ts">
-  import {useRouter} from 'vue-router'
-  import {myStore} from '@/store/my'
-  const store = myStore()
-  const router = useRouter()
-  if(!store.userInfo.user_name) store.getUserInfo()
-  const gotoPage = (path) => {
-    router.push(path)
-  }
+
 </script>
+
 <template>
-  <div class="account-info">
-    <p>
-        <label>账户余额（无忧币）<van-icon @click="gotoPage('/my/account/coinExplain')" name="question-o" /></label>
-        <span @click="gotoPage('/my/account/advance')">提现<van-icon name="arrow" /></span>
-    </p>
-    <h3>{{store.userInfo.account_price && store.userInfo.account_price.toFixed(2)}}</h3>
-    <dl v-if="store.userInfo.role == 3">
-      <dt>
-        <h5>￥{{store.userInfo.account_price && (store.userInfo.account_price-store.userInfo.frozen_amount).toFixed(2)}}</h5>
-        <h6>可用余额</h6>
-      </dt>
-      <dt>
-        <h5>￥{{store.userInfo.frozen_amount && store.userInfo.frozen_amount.toFixed(2)}}</h5>
-        <h6>签约押金（不可用）<van-icon @click="gotoPage('/my/account/depositExplain')" name="question-o" /></h6>
-      </dt>
-    </dl>
+  <div>
+    登录页
   </div>
 </template>
 <style scoped>

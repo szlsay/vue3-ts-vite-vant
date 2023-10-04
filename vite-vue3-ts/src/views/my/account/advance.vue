@@ -1,68 +1,10 @@
 <script setup lang="ts">
-    import {reactive,watch} from 'vue'
-    import AccountInfo from '../components/AccountInfo.vue'
-    import AccountList from '../components/AccountList.vue'
-    import {withdrawal} from '@/api/my'
-    import { Toast } from 'vant';
-    import {myStore} from '@/store/my'
-    const store = myStore()
-    const leftBack = () => history.back()
-    const state = reactive({
-      price: null,
-      loading: false
-    })
-    const submitAdvance = async () => {
-        if(state.price < 0.1){
-            Toast('提现金额不能小于0.1元')
-            return
-        }
-        const res = await withdrawal({
-            price: state.price
-        })
-        if(res){
-            store.getUserInfo()
-        }
-        Toast(res.msg)
-    }
-    const allAdvance = () => {
-        state.price = store.userInfo.account_price
-    }
-    watch(()=>state.price,(newValue,oldValue) =>{
-        if(parseFloat(newValue)<0){
-            Toast('提现金额不能为负数')
-            return
-        }
-        if(parseFloat(newValue)>50000){
-            Toast('每次提现金额不能超过50000')
-            return
-        }
-        if(newValue){
-            newValue = newValue.toString()
-            let index = newValue.indexOf('.')
-            if(index>0 && newValue.length-index>3){
-                state.price = parseFloat(oldValue)
-                return
-            }
-        }
-    })
+
 </script>
+
 <template>
-  <van-nav-bar title="提现" left-arrow @click-left="leftBack"/>
-  <div class="advance">
-    <van-form @submit="submitAdvance">
-        <div class="advance-amount">
-            <h5>提现金额</h5>
-            <div>
-                <span>￥</span>
-                <input v-model="state.price" type="number" />
-            </div>
-            <p>
-                <span>可提现余额￥{{store.userInfo.account_price}}</span>
-                <label @click="allAdvance">全部提现</label>
-            </p>
-        </div>
-        <button class="advance-btn" native-type="submit">提现至支付宝</button>
-    </van-form>
+  <div>
+    登录页
   </div>
 </template>
 <style scoped>

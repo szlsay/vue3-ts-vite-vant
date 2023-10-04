@@ -1,30 +1,10 @@
 <script setup lang="ts">
-  import {useRouter} from 'vue-router'
-  import {Toast} from 'vant'
-  const router = useRouter()
-  const props = defineProps({
-    role: {
-        type: Number
-    }
-  })
-  const emits = defineEmits(['back'])
-  const gotoPage = () => {
-    if(props.role === 1) router.push('/my/partner/person')
-    if(props.role === 2) router.push('/my/partner/admin')
-    if(props.role === 3) router.push('/my/partner/company')
-  }
+
 </script>
+
 <template>
-  <div class="switch-popup">
-    <div class="switch-top">
-        <strong>!</strong>
-        <p>温馨提示</p>
-    </div>
-    <p class="switch-p">您当时尚未申请身份 <br/>暂无身份切换</p>
-    <div class="switch-btn">
-        <button class="active" @click="emits('back')">想一想</button>
-        <button @click="gotoPage">去申请</button>
-    </div>
+  <div>
+    登录页
   </div>
 </template>
 <style scoped>
