@@ -3,7 +3,6 @@
     import {adminAuditorTaskList,adminAuditorTalentList,adminAuditorCompanyList} from '@/api/admin'
     import { Toast } from 'vant';
     import Tabs from '@/components/Tabs.vue'
-    import ProgressBar from '@/components/ProgressBar.vue'
     import {useRouter} from 'vue-router'
     const router = useRouter()
     const leftBack = () => history.back();

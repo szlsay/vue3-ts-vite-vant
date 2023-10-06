@@ -2,8 +2,6 @@
     import {reactive} from 'vue'
     import {adminAuditorCompanyDetail,adminAuditorCompanyEdit} from '@/api/admin'
     import { Toast } from 'vant';
-    import Tabs from '@/components/Tabs.vue'
-    import ProgressBar from '@/components/ProgressBar.vue'
     import {useRouter} from 'vue-router'
     const router = useRouter()
     const id = router.currentRoute.value.params.id
@@ -12,13 +10,13 @@
         loading: false,
         item: {}
     })
-    const auditorEdit = async (type) => {
+    const auditorEdit = async (type: any) => {
         const res = await adminAuditorCompanyEdit({
             "user_id": id,
             "is_check": type
         })
         if(res){
-            Toast('操作成功')
+            new Toast('操作成功')
             leftBack()
         }
     }

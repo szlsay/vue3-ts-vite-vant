@@ -3,7 +3,7 @@
   import {myStore} from '@/store/my'
   import {userStore} from '@/store/user'
   import {addRole} from '@/api/my'
-  import {Toast} from 'vant'
+  import {showToast} from 'vant'
   import IdentityPopup from './IdentityPopup.vue'
   const store = myStore()
   const uStore = userStore()
@@ -13,7 +13,7 @@
     role: store.userInfo.role,
     switchRole: store.userInfo.role
   })
-  const setRole = async (role) => {
+  const setRole = async (role: any) => {
     if(state.role === role) return
     let bool = false
     if(role === 1 && store.userInfo.it_enterprise === 1){
@@ -30,7 +30,7 @@
             "role": role
         })
         if(res){
-            Toast('身份切换成功')
+            showToast('身份切换成功')
             store.getUserInfo()
             state.role = role
             uStore.setRole(role)

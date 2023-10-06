@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useRouter } from 'vue-router'
   const router = useRouter()
-  const gotoPage = (path) => {
+  const gotoPage = (path: any) => {
     router.push(path)
   }
 </script>

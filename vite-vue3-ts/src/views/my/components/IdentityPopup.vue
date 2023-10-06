@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import {useRouter} from 'vue-router'
-  import {Toast} from 'vant'
   const router = useRouter()
   const props = defineProps({
     role: {

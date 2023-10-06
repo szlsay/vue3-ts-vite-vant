@@ -12,23 +12,23 @@
   })
   const submit = async () => {
     if(!state.company_name){
-        Toast('请输入企业名称')
+        new Toast('请输入企业名称')
         return
     }
     if(!state.organization_code){
-        Toast('请输入机构代码')
+        new Toast('请输入机构代码')
         return
     }
     if(!state.contacts){
-        Toast('请输企业法人')
+        new Toast('请输企业法人')
         return
     }
     if(!state.phone){
-        Toast('请输入联系电话')
+        new Toast('请输入联系电话')
         return
     }
     if(!state.permit){
-        Toast('请上传营业执照')
+        new Toast('请上传营业执照')
         return
     }
     const res = await companyCertification({
@@ -40,15 +40,15 @@
     })
     if(res){
         closeChange()
-        Toast('保存成功')
+        new Toast('保存成功')
     }else{
-        Toast('保存失败')
+        new Toast('保存失败')
     }
   }
   const closeChange = () => {
     history.back()
   }
-  const uploadJust = (value) => {
+  const uploadJust = (value: any) => {
     state.permit = value
   }
 </script>

@@ -3,14 +3,15 @@
   import {Toast} from 'vant'
   const props = defineProps({
     item: {
-        type: Object
+        type: Object,
+        default: () => {}
     }
   })
   const emits = defineEmits(['back'])
   const { toClipboard } = useClipboard()
   const shareLink = () => {
     toClipboard(props.item.manage_name)
-    Toast('复制成功')
+    new Toast('复制成功')
   }
 </script>
 <template>

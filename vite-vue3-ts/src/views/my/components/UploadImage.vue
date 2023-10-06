@@ -13,13 +13,13 @@
     const deleteFile = () => {
         state.fileList = []
     }
-    const afterRead = async (file) => {
+    const afterRead = async (file: any) => {
         file.status = 'uploading'
         file.message = '上传中...'
         let param = new FormData()
         param.append('user','test')
         param.append('file',file.file)
-        const res = await uploadImage(param)
+        const res: any = await uploadImage(param)
         file.url = res.imageUrl
         file.status = 'done'
         file.message = '上传成功'

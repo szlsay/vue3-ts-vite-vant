@@ -4,7 +4,7 @@ export const myStore = defineStore({
     id: 'my',
     state: () => {
         return {
-            userInfo: {},
+            userInfo: <any>{},
             companyList: [],
             projectList: [],
             resumeInfo: {},

@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { reactive } from 'vue';
-    import { useRouter } from 'vue-router';
     import TaskList from '@/components/list/TaskList.vue'
     import {collectList} from '@/api/my'
     import { Toast } from 'vant';
@@ -11,11 +10,11 @@
     })
     const getCollectList = async () =>{
         state.loading = true
-        const res = await collectList()
+        const res: any = await collectList()
         if(res){
             state.list = res.data
         }else{
-            Toast(res.msg)
+            new Toast(res.msg)
         }
         state.loading = false
     }

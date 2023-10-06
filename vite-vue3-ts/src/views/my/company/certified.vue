@@ -5,7 +5,7 @@
   import UploadImage from '../components/UploadImage.vue'
   import {myStore} from '@/store/my'
   const store = myStore()
-  const state = reactive({
+  const state: any = reactive({
     detail: {}
   })
   const getCompanyDetail = async () => {
@@ -14,10 +14,10 @@
         state.detail = res.data
     }
   }
-  const uploadJust = (value) => {
+  const uploadJust = (value: any) => {
     state.idCardJust = value
   }
-  const uploadBack = (value) => {
+  const uploadBack = (value: any) => {
     state.idCardBack = value
   }
   const gotoBack = () => history.back()

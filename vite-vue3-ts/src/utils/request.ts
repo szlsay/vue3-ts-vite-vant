@@ -28,7 +28,7 @@ service.interceptors.response.use(
             if(res.code == 200){
                 return res.result || res.data
             }else{
-                Toast(res.success)
+                new Toast(res.success)
             }   
         }
     },

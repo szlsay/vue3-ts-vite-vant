@@ -2,14 +2,15 @@
     import {reactive} from 'vue'
     const props = defineProps({
         tabs: {
-            type: Array
+            type: Array<any>,
+            default: () => []
         }
     })
     const state = reactive({
         type: props.tabs[0].type
     })
     const emit = defineEmits(['tabsCall'])
-    const setTabList = (type) => {
+    const setTabList = (type: any) => {
         state.type = type
         emit('tabsCall', type)
      }
