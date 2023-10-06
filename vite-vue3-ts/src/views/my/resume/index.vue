@@ -1,11 +1,31 @@
 <script setup lang="ts">
-
+  import {myStore} from '@/store/my'
+  import PersonInfo from './components/PersonInfo.vue'
+  import PersonAdvantage from './components/PersonAdvantage.vue'
+  import PositionType from './components/PositionType.vue'
+  import ExcellentSkill from './components/ExcellentSkill.vue'
+  import WorkExperience from './components/WorkExperience.vue'
+  import ProjectExperience from './components/ProjectExperience.vue'
+  import EducationalExperience from './components/EducationalExperience.vue'
+  const leftBack = () => history.back();
+  const store = myStore()
+  store.getResumeDetail()
+  store.getResumeDict()
 </script>
-
 <template>
-  <div>
-    登录页
+  <van-nav-bar title="我的简历" left-arrow @click-left="leftBack"/>
+  <div class="resume" v-if="store.resumeInfo.id">
+    <PersonInfo :item="store.resumeInfo"></PersonInfo>
+    <PersonAdvantage></PersonAdvantage>
+    <PositionType></PositionType>
+    <ExcellentSkill></ExcellentSkill>
+    <WorkExperience></WorkExperience>
+    <ProjectExperience></ProjectExperience>
+    <EducationalExperience></EducationalExperience>
   </div>
+  <router-link to="/my/resume/preview">
+  <button class="resume-btn">预览简历</button>
+  </router-link>
 </template>
 <style scoped>
   .resume{

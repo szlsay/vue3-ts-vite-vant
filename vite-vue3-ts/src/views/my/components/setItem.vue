@@ -1,11 +1,23 @@
 <script setup lang="ts">
-
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
+  const gotoPage = (path) => {
+    router.push(path)
+  }
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <div class="my-common">
+        <div class="my-item" @click="gotoPage('/login/privacyPolicy')">
+            <img src="@/assets/img/my/icon-privacy.png" />
+            <label>隐私政策</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+        <div class="my-item" @click="gotoPage('/login/serviceAgree')">
+            <img src="@/assets/img/my/icon-agreement.png" />
+            <label>服务协议</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+    </div>
 </template>
 <style scoped>
   .my-common{

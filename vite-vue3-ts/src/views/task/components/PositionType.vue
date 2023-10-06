@@ -1,11 +1,37 @@
 <script setup lang="ts">
-
+    import { inject,reactive } from 'vue';
+    import { positionTypeList } from '@/api/task';
+    import { taskStore } from '@/store/task'
+    import { Toast } from 'vant';
+    const { closePositionType } = inject('popup')
+    const store = taskStore()
+    const state = reactive({
+        typeKey: 0
+    })
+    const leftBack = () => closePositionType();
+    const setTypeKey = (key) => {
+        state.typeKey = key
+    }
+    const getPositionList = async () => {
+        const res = await positionTypeList()
+        if(res){
+            store.setPositionList(res)
+        }else{
+            Toast(res.msg)
+        }
+    }
+    if(store.positionList.length<=0) getPositionList()
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <van-nav-bar title="职位类型" left-arrow @click-left="leftBack"/>
+    <div class="position-type">
+        <div class="position-type-left">
+            <h5 :class="state.typeKey==index?'active':''" v-for="(item, index) in store.positionList" :key="index" @click="setTypeKey(index)">{{item.name}}</h5>
+        </div>
+        <div class="position-type-right">
+            <span v-for="(item, index) in store.positionList[state.typeKey] && store.positionList[state.typeKey].children" :key="index" @click="closePositionType(item.name)">{{item.name}}</span>
+        </div>
+    </div>
 </template>
 <style scoped>
     .position-type{

@@ -1,11 +1,71 @@
 <script setup lang="ts">
-
+    import {reactive} from 'vue'
+    import FooterTabbar from '@/components/FooterTabbar.vue'
+    import CharLine from './components/CharLine.vue'
+    import CharBar from './components/CharBar.vue'
+    import CharPie from './components/CharPie.vue'
+    import {adminHomeChart} from '@/api/admin'
+    const state = reactive({
+      chartData: {}
+    })
+    const getAdminHomeChart = async () => {
+      const res = await adminHomeChart({})
+      if(res){
+        state.chartData = res
+      }
+    }
+    getAdminHomeChart()
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <div class="admin-page">
+        <van-nav-bar title="首页" />
+        <div class="admin-banner">
+            <img src="@/assets/img/admin/home/banner.png" />
+            <p>轻松管理项目进度，提高审核效率</p>
+        </div>
+        <div class="admin-title">
+            <h3>工作管理<i></i></h3>
+        </div>
+        <div class="admin-job">
+            <router-link to="/admin/home/contract">
+                <img src="@/assets/img/admin/home/icon-contract.png" />
+                <h4>合约管理<span>合约进度管理</span></h4>
+            </router-link>
+            <router-link to="/admin/home/auditor">
+                <img src="@/assets/img/admin/home/icon-auditor.png" />
+                <h4>审核管理<span>任务/认证管理</span></h4>
+            </router-link>
+            <router-link to="/admin/home/pay">
+                <img src="@/assets/img/admin/home/icon-pay.png" />
+                <h4>发薪管理<span>合约薪资管理</span></h4>
+            </router-link>
+            <router-link to="/admin/home/user">
+                <img src="@/assets/img/admin/home/icon-user.png" />
+                <h4>用户管理<span>入驻用户/企业</span></h4>
+            </router-link>
+        </div>
+        <div class="admin-title">
+            <h3>合约数据(周）<i></i></h3>
+            <dl>
+              <dt>上周</dt>
+              <dd>下周</dd>
+            </dl>
+        </div>
+        <CharLine v-if="state.chartData.line" :data="state.chartData.line"></CharLine>
+        <div class="admin-title">
+            <h3>新增入驻(周）<i></i></h3>
+            <dl>
+              <dt>人才</dt>
+              <dd>企业</dd>
+            </dl>
+        </div>
+        <CharBar v-if="state.chartData.bar" :data="state.chartData.bar"></CharBar>
+        <div class="admin-title">
+            <h3>人才年龄比例<i></i></h3>
+        </div>
+        <CharPie v-if="state.chartData.pie" :data="state.chartData.pie"></CharPie>
+    </div>
+    <FooterTabbar></FooterTabbar>
 </template>
 <style scoped>
   .van-nav-bar{

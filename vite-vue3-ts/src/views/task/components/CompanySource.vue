@@ -1,11 +1,19 @@
 <script setup lang="ts">
-
+    const props = defineProps({
+        item: {
+            type: Object,
+            default: () => []
+        }
+    })
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <div class="company-source">
+        <img :src="item.logo" />
+        <div>
+            <h5>{{item.company_name}}</h5>
+            <p>{{item.city}} . {{item.area}}</p>
+        </div>
+    </div>
 </template>
 <style scoped>
 .company-source{

@@ -1,11 +1,30 @@
 <script setup lang="ts">
-
+  import {inject,reactive} from 'vue'
+  import {getTalent} from '@/api/talent'
+  const {closeTalent} = inject('popup')
+  const state = reactive({
+    value: '',
+    list: []
+  })
+  const getTalentList = async () =>{
+    const res = await getTalent({})
+    if(res){
+        state.list = res.records
+    }
+  }
+  getTalentList()
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <van-nav-bar title="选择人才" left-arrow @click-left="closeTalent('')"/>
+    <div class="talent-small">
+        <div class="talent-small-item" v-for="(item,index) in state.list" :key="index" @click="closeTalent(item)">
+            <img :src="item.it_head" />
+            <div class="small-item-text">
+                <h3>{{item.user_name}}<i>自营</i></h3>
+                <p>{{item.position_name}} ｜{{item.sex==1?'男':'女'}} ｜ {{item.work_year}} ｜ {{item.highest_education}} ｜{{item.age}}</p>
+            </div>
+        </div>
+    </div>
 </template>
 <style scoped>
 .talent-small-item{

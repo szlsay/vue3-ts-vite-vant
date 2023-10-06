@@ -1,11 +1,90 @@
 <script setup lang="ts">
-
+    import {reactive} from 'vue'
+    import {adminContractList,adminPayConfirm} from '@/api/admin'
+    import { Toast } from 'vant';
+    const leftBack = () => history.back();
+    const state = reactive({
+        loading: false,
+        type: 0,
+        contractList: [],
+        bool: false,
+        selectType: 0,
+        selectId: 0
+    })
+    const getContractList = async () => {
+        state.loading = true
+        const res = await adminContractList({
+            is_contract_type: 4
+        })
+        if(res){
+            state.contractList = res.records
+        }else{
+            Toast(res.msg)
+        }
+        state.loading = false
+    } 
+    const selectContract = (item) => {
+        state.selectId = item.contract_id
+        state.bool = true
+    }
+    const contractConfirm = async () => {
+        const res = await adminPayConfirm({
+            "contract_id": state.selectId
+        })
+        if(res){
+            Toast('发薪完成')
+            getContractList()
+        }
+        state.bool = false
+    }
+    getContractList()
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+<div class="wy-admin-page">
+    <van-nav-bar title="发薪管理" left-arrow @click-left="leftBack"/>
+    <van-pull-refresh class="pay-list-top" v-model="state.loading" @refresh="getContractList">
+        <div class="home-contract-list" v-for="(item,index) in state.contractList" :key="index" >
+            <dl>
+                <dt>
+                    <h3>
+                        {{item.user_name}}
+                        <i v-if="item.settle_salary">已完成</i>
+                        <i v-else>审核中</i>
+                    </h3>
+                </dt>
+                <dt>
+                    <label>合约名称：</label>
+                    <span>{{item.contract_name}}</span>
+                </dt>
+                <dt>
+                    <label>薪资发放：</label>
+                    <span>{{item.task_salary}}/个</span>
+                </dt>
+                <dt>
+                    <label>合约周期：</label>
+                    <span>{{item.start_cycle_time.replaceAll('-','.')}}-{{item.end_cycle_time.replaceAll('-','.')}}</span>
+                </dt>
+                <dt class="wy-flex">
+                    <label>合约状态：</label>
+                    <span>完成</span>
+                </dt>
+            </dl>
+            <div class="home-contract-bottom">
+                <button v-if="!item.settle_salary" @click="selectContract(item)">发放薪资</button>
+                <button v-else class="opacity">发放薪资</button>
+            </div>
+        </div>
+        <van-loading v-if="state.loading">加载中...</van-loading>
+        <div class="wy-no-data" v-if="!state.loading && state.contractList.length==0">暂无数据</div>
+    </van-pull-refresh>
+    <van-popup v-model:show="state.bool" closeable round :style="{ width: ' 13.07rem',height: '8.75rem' }">
+        <div class="admin-contract-popup">
+            <h5>温馨提示</h5>
+            <p>确定将合约薪资发放吗？</p>
+            <button @click="contractConfirm()">确定</button>
+        </div>
+    </van-popup>
+</div>
 </template>
 <style scoped>
     .pay-list-top{

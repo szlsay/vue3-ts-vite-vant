@@ -1,10 +1,10 @@
 <script setup lang="ts">
-
+  
 </script>
-
 <template>
-  <div>
-    登录页
+  <div class="content">
+    <slot></slot>
+    <p>最终解释权归IT企业服务平台所有</p>
   </div>
 </template>
 <style scoped>

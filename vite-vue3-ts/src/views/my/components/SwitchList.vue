@@ -1,11 +1,85 @@
 <script setup lang="ts">
-
+  import {reactive} from 'vue'
+  import {myStore} from '@/store/my'
+  import {userStore} from '@/store/user'
+  import {addRole} from '@/api/my'
+  import {Toast} from 'vant'
+  import IdentityPopup from './IdentityPopup.vue'
+  const store = myStore()
+  const uStore = userStore()
+  if(Object.keys(store.userInfo).length === 0) store.getUserInfo()
+  const state = reactive({
+    show: false,
+    role: store.userInfo.role,
+    switchRole: store.userInfo.role
+  })
+  const setRole = async (role) => {
+    if(state.role === role) return
+    let bool = false
+    if(role === 1 && store.userInfo.it_enterprise === 1){
+        bool = true
+    }
+    if(role === 2 && store.userInfo.manage === 1){
+        bool = true
+    }
+    if(role === 3 && store.userInfo.enterprise === 1){
+        bool = true
+    }
+    if(bool){
+        const res = await addRole({
+            "role": role
+        })
+        if(res){
+            Toast('身份切换成功')
+            store.getUserInfo()
+            state.role = role
+            uStore.setRole(role)
+            localStorage.setItem('role',role)
+        }
+    }else{
+        state.switchRole = role
+        state.show = true
+    }
+  }
 </script>
-
 <template>
-  <div>
-    登录页
+  <div class="switch-item" @click="setRole(1)">
+    <div class="item-cont">
+        <img src="@/assets/img/my/icon-personnel.png" />
+        <div>
+            <h5>IT企业人才</h5>
+            <p v-if="store.userInfo.it_enterprise !==1">未申请</p>
+        </div>
+    </div>
+    <img class="item-back" src="@/assets/img/my/personnel-bg.png" />
+    <strong v-if="store.userInfo.role === 1">当前身份</strong>
   </div>
+  <div class="switch-item" @click="setRole(2)">
+    <div class="item-cont">
+        <img src="@/assets/img/my/icon-controller.png" />
+        <div>
+            <h5>管理端</h5>
+            <p v-if="store.userInfo.manage !==1">未申请</p>
+        </div>
+    </div>
+    <img class="item-back" src="@/assets/img/my/controller-bg.png" />
+    <strong v-if="store.userInfo.role === 2">当前身份</strong>
+  </div>
+  <div class="switch-item"  @click="setRole(3)">
+    <div class="item-cont">
+        <img src="@/assets/img/my/icon-enterprise.png" />
+        <div>
+            <h5>企业端</h5>
+            <p v-if="store.userInfo.enterprise !==1">未申请</p>
+        </div>
+    </div>
+    <img class="item-back" src="@/assets/img/my/enterprise-bg.png" />
+    <strong v-if="store.userInfo.role === 3">当前身份</strong>
+  </div>
+    <!--弹窗-->
+    <van-popup v-model:show="state.show" duration="0" :style="{ width: '13.07rem',height: '15.44rem',borderRadius:'0.53rem' }">
+      <IdentityPopup @back="state.show = false" :role="state.switchRole"></IdentityPopup>
+    </van-popup>
 </template>
 <style scoped>
   .switch-item{

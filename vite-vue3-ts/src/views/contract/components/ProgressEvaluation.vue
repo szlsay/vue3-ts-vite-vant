@@ -1,11 +1,69 @@
 <script setup lang="ts">
-
+  import { Toast } from 'vant'
+  import {inject,reactive} from 'vue'
+  import {contractGradeEdit} from '@/api/contract'
+  const {closeEvaluation} = inject('popup')
+  const state = reactive({
+    value: '',
+    evalType: ''
+  })
+  const props = defineProps({
+    num: {
+        type: String
+    },
+    id: {
+        type: String
+    }
+  })
+  const setProgressGrade = async () =>{
+    if(!state.evalType){
+        Toast('请选择评估状态')
+        return
+    }
+    if(!state.value){
+        Toast('请输入具体描述')
+        return
+    }
+    const res = await contractGradeEdit({
+        "contract_state": state.evalType,
+        "contract_stage": state.value,
+        "contract_id": props.id,
+        "num": props.num
+    })
+    if(res){
+        Toast('评估成功')
+        closeEvaluation(true)
+    }else{
+        Toast('评估失败')
+    }
+  }
+  const evalTypeClick = (type) => {
+    state.evalType = type
+  }
+  const numText = ["零","一","二","三","四"]
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <van-nav-bar title="进度评估" left-arrow @click-left="closeEvaluation(false)"/>
+    <div class="eval-cont">
+        <h3>第{{numText[props.num]}}阶段</h3>
+        <p>
+            <span @click="evalTypeClick(1)" :class="state.evalType == 1?'active':''">通过</span>
+            <span @click="evalTypeClick(2)" :class="state.evalType == 2?'active':''">有风险</span>
+            <span @click="evalTypeClick(3)" :class="state.evalType == 3?'active':''">问题严重</span>
+        </p>
+        <van-field
+            v-model="state.value"
+            rows="8"
+            autosize
+            label=""
+            type="textarea"
+            maxlength="500"
+            placeholder="具体描述"
+            show-word-limit
+            class="eval-field"
+        />
+    </div>
+    <button class="wy-submit" @click="setProgressGrade()">提交评估</button>
 </template>
 <style scoped>
     .wy-submit{

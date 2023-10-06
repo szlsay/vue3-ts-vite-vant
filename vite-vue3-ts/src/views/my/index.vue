@@ -1,11 +1,157 @@
 <script setup lang="ts">
-
+  import {reactive} from 'vue'
+  import { useRouter } from 'vue-router'
+  import MessageList from '@/components/list/MessageList.vue'
+  import FooterTabbar from '@/components/FooterTabbar.vue'
+  import CustomerManager from './components/CustomerManager.vue'
+  import {myStore} from '@/store/my'
+  import {myAllCount} from '@/api/my'
+  const state = reactive({
+    show: false,
+    count: {}
+  })
+  const store = myStore()
+  const router = useRouter()
+  const getMyAllCount = async () => {
+    const res = await myAllCount()
+    if(res){
+      state.count = res[0]
+    }
+  }
+  if(!store.userInfo.user_name) {
+    store.getUserInfo()
+  }
+  getMyAllCount()
+  const gotoPage = (path) => {
+    router.push(path)
+  }
 </script>
-
 <template>
-  <div>
-    登录页
+  <div class="my-page">
+    <van-nav-bar title="我的" @click-left="closeWorksAdd">
+        <template #right>
+            <van-icon name="setting-o" @click="gotoPage('/my/set')" />
+        </template>
+    </van-nav-bar>
+    <div class="my-info">
+        <img v-if="store.userInfo.it_head" :src="store.userInfo.it_head" />
+        <img v-else src="@/assets/img/icon/icon-message.png" />
+        <div @click="gotoPage('/my/user')">
+            <h3>{{store.userInfo.user_name}}<span></span></h3>
+            <p>{{store.userInfo.role===1?'IT企业人才':store.userInfo.role===3?'企业端':'管理端'}}</p>
+        </div>
+        <i v-if="store.userInfo.role!=2" @click="gotoPage('/my/account')"></i>
+    </div>
+    <div class="my-type" v-if="store.userInfo.role===1">
+        <router-link to="/my/collect">
+            <img src="@/assets/img/my/icon-my-collection.png" />
+            <span>我的收藏</span>
+        </router-link>
+        <strong></strong>
+        <router-link to="/my/resume">
+            <img src="@/assets/img/my/icon-my-resume.png" />
+            <span>我的简历</span>
+        </router-link>
+    </div>
+    <div class="my-type-enterprise" v-if="store.userInfo.role===3">
+      <router-link to="/my/collect/talent">
+          <img src="@/assets/img/my/icon-collection.png" />
+          <span>我的收藏</span>
+      </router-link>
+      <router-link to="/my/task">
+          <i>{{state.count.task_count}}</i>
+          <img src="@/assets/img/my/icon-task-management.png" />
+          <span>任务管理</span>
+      </router-link>
+      <router-link to="/my/contract/1">
+          <i>{{state.count.contract_count}}</i>
+          <img src="@/assets/img/my/icon-contract-management.png" />
+          <span>合约管理</span>
+      </router-link>
+      <router-link to="/my/coupon">
+          <i>{{state.count.coupon_count}}</i>
+          <img src="@/assets/img/my/icon-experience-gold.png" />
+          <span>我的体验金</span>
+      </router-link>
+    </div>
+    <div class="my-contract" v-if="store.userInfo.role!=2">
+        <div class="my-title">
+            <h3>我的合约</h3>
+            <span  @click="gotoPage('/my/contract/0')">查看全部合约<van-icon name="arrow" /></span>
+        </div>
+        <div class="my-contract-cur" v-if="store.userInfo.role===1">
+            <span @click="gotoPage('/my/contract/2')"><img src="@/assets/img/my/contract-be-signed.png" />待签约</span>
+            <span @click="gotoPage('/my/contract/3')"><img src="@/assets/img/my/contract-in-performance.png" />履约中</span>
+            <span @click="gotoPage('/my/contract/4')"><img src="@/assets/img/my/contract-completed.png" />已完成</span>
+            <span @click="gotoPage('/my/contract/5')"><img src="@/assets/img/my/contract-canceled.png" />已取消</span>
+        </div>
+        <div class="my-contract-cur" v-if="store.userInfo.role===3">
+            <span @click="gotoPage('/my/contract/2')"><img src="@/assets/img/my/contract-be-send.png" />待发送</span>
+            <span @click="gotoPage('/my/contract/2')"><img src="@/assets/img/my/contract-be-signed.png" />待确认</span>
+            <span @click="gotoPage('/my/contract/3')"><img src="@/assets/img/my/contract-in-performance.png" />履约中</span>
+            <span @click="gotoPage('/my/contract/4')"><img src="@/assets/img/my/contract-completed.png" />已完成</span>
+            <span @click="gotoPage('/my/contract/5')"><img src="@/assets/img/my/contract-canceled.png" />已失效</span>
+        </div>
+    </div>
+    <div class="my-common" v-if="store.userInfo.role!=2">
+        <div class="my-title">
+            <h3>常用功能</h3>
+        </div>
+        <div class="my-item" @click="gotoPage(store.userInfo.user_is_check === 1?'/my/user/certified':'/my/user/authReal')">
+            <img src="@/assets/img/my/icon-real-name-auth.png" />
+            <label>实名认证</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+        <div class="my-item" @click="gotoPage(store.userInfo.enterprise?'/my/company/certified':'/my/company/authReal')"  v-if="store.userInfo.role===3">
+            <img src="@/assets/img/my/icon-company-auth.png" />
+            <label>企业认证</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+        <div class="my-item" @click="state.show = true">
+            <img src="@/assets/img/my/icon-account-manager.png" />
+            <label>专属客户经理</label>
+            <span><img src="@/assets/img/icon/icon-message.png" />无忧经理<van-icon name="arrow" /></span>
+        </div>
+    </div>
+    <div class="my-common" v-if="store.userInfo.role!=2">
+        <div class="my-item" @click="gotoPage('/my/feedback')">
+            <img src="@/assets/img/my/icon-feedback.png" />
+            <label>意见反馈</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+        <div class="my-item" @click="gotoPage('/my/about')">
+            <img src="@/assets/img/my/icon-about.png" />
+            <label>关于我们</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+    </div>
+    <div class="my-common" v-if="store.userInfo.role===2">
+        <div class="my-item" @click="gotoPage('/my/feedback')">
+            <img src="@/assets/img/my/icon-feedback.png" />
+            <label>意见反馈</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+    </div>
+    <div class="my-common" v-if="store.userInfo.role===2">
+        <div class="my-item" @click="gotoPage('/my/about')">
+            <img src="@/assets/img/my/icon-about.png" />
+            <label>关于我们</label>
+            <span><van-icon name="arrow" /></span>
+        </div>
+    </div>
+    <div class="my-common">
+        <div class="my-item" @click="gotoPage('/my/user/identitySwitch')">
+            <img src="@/assets/img/my/icon-switch-role.png" />
+            <label>切换身份</label>
+            <span class="col-9">当前为{{store.userInfo.role===1?'IT企业人才':store.userInfo.role===3?'企业端':'管理端'}}身份<van-icon name="arrow" /></span>
+        </div>
+    </div>
+    <!--弹窗-->
+    <van-popup v-model:show="state.show" duration="0" :style="{ width: '13.07rem',height: '15.44rem',borderRadius:'0.53rem' }">
+      <CustomerManager @back="state.show = false" :item="store.userInfo"></CustomerManager>
+    </van-popup>
   </div>
+  <FooterTabbar></FooterTabbar>
 </template>
 <style scoped>
   .col-9{

@@ -1,11 +1,40 @@
 <script setup lang="ts">
-
+  import { reactive,provide } from 'vue';
+  import {myStore} from '@/store/my'
+  import UserInfoPage from '../../components/UserInfoPage.vue'
+  const store = myStore()
+  const state = reactive({
+    show: false
+  })
+  const props = defineProps({
+    item: {
+      type: Object
+    },
+    page: {
+      type: String
+    }
+  })
+  const closeChange = () => {
+    state.show = false
+    store.getResumeDetail()
+  }
+  provide('popup',{
+    closeChange
+  })
 </script>
-
 <template>
-  <div>
-    登录页
+  <div class="person-info">
+    <div class="info-left">
+        <h3>{{props.item.user_name}}<img src="@/assets/img/my/icon-feedback.png" @click="state.show = true"  v-if="props.page!=='preview'" /></h3>
+        <p>{{props.item.work_year}} ｜ {{props.item.highest_education}} ｜ {{props.item.age}}</p>
+    </div>
+    <img :src="props.item.it_head" />
   </div>
+  
+    <!--切换城市弹窗-->
+    <van-popup v-model:show="state.show" position="top" duration="0" :style="{ width: '100%',height: '100%' }">
+      <UserInfoPage></UserInfoPage>
+    </van-popup>
 </template>
 <style scoped>
   .person-info{

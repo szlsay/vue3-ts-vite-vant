@@ -1,11 +1,33 @@
 <script setup lang="ts">
-
+    import { inject } from 'vue';
+    // import { cityList } from '@/api/task';
+    import { taskStore } from '@/store/task'
+    import { Toast } from 'vant';
+    const { closeCitySwitch } = inject('popup')
+    const store = taskStore()
+    const leftBack = () => closeCitySwitch();
+    // const getCityList = async () => {
+    //     const res = await cityList()
+    //     if(res){
+    //         store.setCityList(res)
+    //     }else{
+    //         Toast(res.msg)
+    //     }
+    // }
+    if(store.cityList.length<=0) store.getCityList()
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <van-nav-bar title="城市切换" left-arrow @click-left="leftBack"/>
+    <div class="city-switch">
+        <h3>当前城市：</h3>
+        <div class="city-switch-text">
+            <span>{{store.cityValue}}</span>
+        </div>
+        <h3>切换城市：</h3>
+        <div class="city-switch-text">
+            <span v-for="(item, index) in store.cityList" :key="index" @click="closeCitySwitch(item.name)">{{item.name}}</span>
+        </div>
+    </div>
 </template>
 <style scoped>
   .city-switch{

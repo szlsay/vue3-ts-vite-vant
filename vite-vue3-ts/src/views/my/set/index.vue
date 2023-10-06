@@ -1,11 +1,22 @@
 <script setup lang="ts">
-
+    import { reactive } from 'vue';
+    import { useRouter } from 'vue-router';
+    import setItem from '../components/setItem.vue'
+    import { userStore } from '@/store/user'
+    const store = userStore()
+    const router = useRouter()
+    const leftBack = () => history.back()
+    const logout = () => {
+        store.logout()
+        router.push('/login')
+    }
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+<div class="set-page">
+    <van-nav-bar title="我的设置" left-arrow @click-left="leftBack"/>
+    <setItem></setItem>
+    <button class="set-btn" @click="logout">退出登录</button>
+</div>
 </template>
 <style scoped>
 .set-page{

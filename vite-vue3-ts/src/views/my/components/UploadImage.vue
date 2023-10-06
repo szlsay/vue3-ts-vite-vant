@@ -1,10 +1,39 @@
 <script setup lang="ts">
-
+  import {reactive} from 'vue'
+  import {uploadImage} from '@/api/my'
+  const state = reactive({
+    fileList: []
+  })
+  const props = defineProps({
+    text: {
+        type: String
+    }
+  })
+  const emits = defineEmits(['uploadChange'])
+    const deleteFile = () => {
+        state.fileList = []
+    }
+    const afterRead = async (file) => {
+        file.status = 'uploading'
+        file.message = '上传中...'
+        let param = new FormData()
+        param.append('user','test')
+        param.append('file',file.file)
+        const res = await uploadImage(param)
+        file.url = res.imageUrl
+        file.status = 'done'
+        file.message = '上传成功'
+        state.fileList = [file]
+        emits('uploadChange',res.imageUrl)
+    }
 </script>
-
 <template>
   <div>
-    登录页
+    <van-uploader v-model="state.fileList" accept=".jpg,.png" 
+        :after-read="afterRead" 
+        :before-delete ="deleteFile"
+        max-count="1" />
+    <p>{{props.text}}</p>
   </div>
 </template>
 <style scoped>

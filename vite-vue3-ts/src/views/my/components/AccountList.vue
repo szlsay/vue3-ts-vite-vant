@@ -1,10 +1,21 @@
 <script setup lang="ts">
-
+  const props = defineProps({
+    list: {
+        type: Array,
+        default: () => []
+    }
+  })
 </script>
-
 <template>
-  <div>
-    登录页
+  <div class="item" v-for="(item,index) in list" :key="index">
+    <div class="item-left">
+        <h5>{{item.contract_name?item.contract_name:'提现'}}</h5>
+        <p>{{item.create_date}}</p>
+    </div>
+    <div class="item-right">
+        <h4>{{item.price}}</h4>
+        <p>余额：{{item.balance}}</p>
+    </div>
   </div>
 </template>
 <style scoped>

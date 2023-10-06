@@ -1,11 +1,21 @@
 <script setup lang="ts">
-
+    const props = defineProps({
+        taskList: {
+            type: Array,
+            default: () => []
+        }
+    })
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <div class="company-task">
+        <h3>其他任务<i></i></h3>
+        <dl>
+            <dt v-for="(item, index) in taskList" :key="index">
+                <h4>{{item.task_name}}<span>{{item.task_budget}}元</span></h4>
+                <p>{{item.city}} ｜ {{item.task_cycle}}天 ｜ {{item.service_mode}}</p>
+            </dt>
+        </dl>
+    </div>
 </template>
 <style scoped>
 h3{

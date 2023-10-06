@@ -1,11 +1,43 @@
 <script setup lang="ts">
-
+    const props = defineProps({
+        item: {
+            type: Object,
+            default: () => []
+        }
+    })
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+    <div class="task-detail">
+        <h3>{{item.task_name}}</h3>
+        <p class="task-h3-text">{{item.position_name}}</p>
+        <dl>
+            <dt>
+                <p>任务预算</p>
+                <strong>{{item.task_budget}}元</strong>
+            </dt>
+            <dt>
+                <p>任务周期</p>
+                <strong>{{item.task_cycle}}天</strong>
+            </dt>
+            <dt>
+                <p>服务方式</p>
+                <strong>{{item.service_mode}}</strong>
+            </dt>
+        </dl>
+        <h4>任务信息</h4>
+        <h5>任务要求</h5>
+        <p class="task-h5-text">{{item.task_ask}}</p>
+        <h4>工作保障</h4>
+        <img class="task-job" src="@/assets/img/task/details-guarantee.png" />
+        <h4>任务来源</h4>
+        <router-link class="task-source" :to="'/task/companySource/'+item.company_id">
+            <img :src="item.head_img" />
+            <div>
+                <h5>{{item.company_name}}</h5>
+                <p>{{item.user_name}} . {{item.city}}</p>
+            </div>
+        </router-link>
+    </div>
 </template>
 <style scoped>
 .task-detail{

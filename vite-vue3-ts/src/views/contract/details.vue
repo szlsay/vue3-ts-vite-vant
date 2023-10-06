@@ -1,12 +1,126 @@
 <script setup lang="ts">
-
+    import { reactive } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { contractDetail,contractOperation } from '@/api/contract';
+    import ProgressBar from '@/components/ProgressBar.vue'
+    import { Toast } from 'vant';
+    import {userStore} from '@/store/user';
+    const store = userStore()
+    const router = useRouter()
+    const contractId = router.currentRoute.value.params.id
+    const state = reactive({
+        item: '',
+        loading: false
+    })
+    const leftBack = () => history.back();
+    const gotoProgress = () => {
+        router.push('/contract/progress/'+ state.item.contract_id)
+    }
+    const getContractDetail = async () => {
+        state.loading = true
+        const res = await contractDetail({
+            id: contractId
+        })
+        if(res){
+            state.item = res.records[0]
+        }else{
+            Toast(res.msg)
+        }
+        state.loading = false
+    }
+    getContractDetail()
+    const putContractOperation = async (type) => {
+        state.loading = true
+        const res = await contractOperation({
+            "is_contract_type": type, 
+            "contract_id": contractId 
+        })
+        if(res.errCode === 200) leftBack()
+        Toast(res.meg)
+        state.loading = false
+    }
+    const refuseChange = () => {
+        putContractOperation(5)
+    }
+    const confirmChange = () => {
+        putContractOperation(3)
+    }
+    const sendChange = () => {
+        putContractOperation(2)
+    }
+    
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
-</template><style scoped>
+    <van-nav-bar title="合约详情" left-arrow @click-left="leftBack"/>
+    <dl v-if="state.item">
+        <dd v-if="store.role == 1">
+            <img :src="state.item.logo" />
+            <div>
+                <h5>{{state.item.company_name}}</h5>
+                <p>{{state.item.create_user_name}}</p>
+            </div>
+        </dd>
+        <dd v-if="store.role == 3">
+            <img :src="state.item.it_head" />
+            <div class="small-item-text">
+                <h3>{{state.item.user_name}}<i>自营</i></h3>
+                <p>{{state.item.position_name}} ｜{{state.item.sex}} ｜ {{state.item.work_year}} ｜ {{state.item.highest_education}} ｜{{state.item.age}}</p>
+            </div>
+        </dd>
+        <dt>
+            <label>合约状态</label>
+            <span>{{state.item.is_contract_type_text}}</span>
+        </dt>
+        <dt>
+            <label>合约名称</label>
+            <span>{{state.item.contract_name}}</span>
+        </dt>
+        <dt>
+            <label>合约类型</label>
+            <span>{{state.item.contract_type}}</span>
+        </dt>
+        <dt>
+            <label>合约薪资</label>
+            <span>{{state.item.task_salary}}</span>
+        </dt>
+        <dt>
+            <label>合约周期</label>
+            <span>{{state.item.start_cycle_time}}-{{state.item.end_cycle_time}}</span>
+        </dt>
+        <dt>
+            <label>签约时间</label>
+            <span>{{state.item.signing_time || '-'}}</span>
+        </dt>
+        <dt>
+            <label>结薪方式</label>
+            <span>{{state.item.check_out}}</span>
+        </dt>
+        <dt>
+            <label>合约备注</label>
+            <span>{{state.item.task_ask}}</span>
+        </dt>
+        <dt>
+            <label>合约结算</label>
+            <span>{{state.item.settle_salary}}</span>
+        </dt>
+        <dt v-if="state.item.is_contract_type!==1 && state.item.is_contract_type!==2">
+            <label>合约进度</label>
+            <span></span>
+        </dt>
+        <dt v-if="state.item.is_contract_type!==1 && state.item.is_contract_type!==2">
+            <ProgressBar :item="state.item"></ProgressBar>
+        </dt>
+                
+    </dl>
+    <div class="contract-btn" v-if="state.item">
+        <button class="confirm-btn" v-if="state.item.is_contract_type===1" v-debounce="sendChange">发送合约</button>
+        <button class="refuse-btn" v-if="state.item.is_contract_type===2" v-debounce="refuseChange">拒绝签约</button>
+        <button class="confirm-btn" v-if="state.item.is_contract_type===2" v-debounce="confirmChange">确认签约</button>
+        <button class="confirm-btn" @click="gotoProgress" v-if="state.item.is_contract_type!=1 && state.item.is_contract_type!=2">合约进度</button>
+    </div>
+    <van-loading v-if="!state.item">加载中...</van-loading>
+</template>
+<style scoped>
 dl{
     font-size: 0.69rem;
     color: #666666;

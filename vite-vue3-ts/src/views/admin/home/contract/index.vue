@@ -1,11 +1,140 @@
 <script setup lang="ts">
-
+    import {reactive} from 'vue'
+    import {adminContractList,adminContractConfirm} from '@/api/admin'
+    import { Toast } from 'vant';
+    import Tabs from '@/components/Tabs.vue'
+    import ProgressBar from '@/components/ProgressBar.vue'
+    import {useRouter} from 'vue-router'
+    const router = useRouter()
+    const leftBack = () => history.back();
+    const tabs = [
+        {
+            type: 0,
+            text: '全部'
+        },
+        {
+            type: 3,
+            text: '履约中'
+        },
+        {
+            type: 4,
+            text: '已完成'
+        }
+    ]
+    const state = reactive({
+        loading: false,
+        type: 0,
+        contractList: [],
+        bool: false,
+        selectType: 0,
+        selectId: 0
+    })
+    const setTabList = (type) => {
+        if(type === state.type) return
+        state.type = type
+        getContractList()
+    }
+    const getContractList = async () => {
+        state.loading = true
+        const res = await adminContractList({
+            is_contract_type: state.type
+        })
+        if(res){
+            state.contractList = res.records
+        }else{
+            Toast(res.msg)
+        }
+        state.loading = false
+    } 
+    const contractStateText = (num) => {
+        return num === 1?'正常':num === 2?'有风险':'问题严重'
+    }
+    const contractState = (item) => {
+        var str = '正常'
+        if(item.contract_IIII_state>0) {
+            return contractStateText(item.contract_IIII_state)
+        }else if(item.contract_III_state>0) {
+            return contractStateText(item.contract_III_state)
+        }else if(item.contract_II_state>0) {
+            return contractStateText(item.contract_II_state)
+        }else if(item.contract_I_state>0) {
+            return contractStateText(item.contract_I_state)
+        }
+        return str
+    }
+    const completeContract = (item) => {
+        state.selectType = 4
+        state.selectId = item.contract_id
+        state.bool = true
+    }
+    const overContract = (item) => {
+        state.selectType = 5
+        state.selectId = item.contract_id
+        state.bool = true
+    }
+    const contractConfirm = async () => {
+        const res = await adminContractConfirm({
+            "is_contract_type": state.selectType, // 4合约完成 5合约终止
+            "contract_id": state.selectId
+        })
+        if(res){
+            getContractList()
+        }
+        state.bool = false
+    }
+    const gotoDetail = (id) =>{
+        router.push('/contract/details/'+id)
+    }
+    getContractList()
 </script>
-
 <template>
-  <div>
-    登录页
-  </div>
+<div class="wy-admin-page">
+    <van-nav-bar title="合约管理" left-arrow @click-left="leftBack"/>
+    <Tabs :tabs="tabs" @tabsCall="setTabList"></Tabs>
+    <van-pull-refresh v-model="state.loading" @refresh="getContractList">
+        <div class="home-contract-list" v-for="(item,index) in state.contractList" :key="index" >
+            <dl @click="gotoDetail(item.contract_id)">
+                <dt>
+                    <h3>{{item.contract_name}}</h3>
+                </dt>
+                <dt>
+                    <label>公司名称：</label>
+                    <span>{{item.company_name}}</span>
+                </dt>
+                <dt>
+                    <label>任务薪资：</label>
+                    <span>{{item.task_salary}}/个</span>
+                </dt>
+                <dt>
+                    <label>合约周期：</label>
+                    <span>{{item.start_cycle_time.replaceAll('-','.')}}-{{item.end_cycle_time.replaceAll('-','.')}}</span>
+                </dt>
+                <dt class="wy-flex">
+                    <label>合约进度：</label>
+                    <ProgressBar :item="item"></ProgressBar>
+                </dt>
+            </dl>
+            <div class="home-contract-bottom">
+                <div :class="contractState(item)==='有风险'?'orange':contractState(item)==='问题严重'?'red':''">
+                    <i></i>
+                    <span>{{contractState(item)}}</span>
+                </div>
+                <button v-if="item.is_contract_type === 3" @click="completeContract(item)">完成合约</button>
+                <button v-if="item.is_contract_type === 3" @click="overContract(item)">终止合约</button>
+            </div>
+        </div>
+        <van-loading v-if="state.loading">加载中...</van-loading>
+        <div class="wy-no-data" v-if="!state.loading && state.contractList.length==0">暂无数据</div>
+    </van-pull-refresh>
+    <van-popup v-model:show="state.bool" closeable round :style="{ width: ' 13.07rem',height: '9.75rem' }">
+        <div class="admin-contract-popup">
+            <h5>温馨提示</h5>
+            <p v-if="state.selectType === 4">当前合约进度已正常完成， <br/>完成合约进行后续薪资发放。</p>
+            <p v-if="state.selectType === 5">当前合约进度存在异常， <br/>经双方沟通决定终止合约。</p>
+            <button @click="contractConfirm()">确定</button>
+        </div>
+    </van-popup>
+</div>
 </template>
 <style scoped>
     .admin-contract-popup{
