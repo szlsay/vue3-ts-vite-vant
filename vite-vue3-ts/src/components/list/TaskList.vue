@@ -1,13 +1,13 @@
 <script setup lang="ts">
     import {useRouter} from 'vue-router'
-    const props = defineProps({
+    defineProps({
         taskList: {
-            type: Array,
+            type: Array<any>,
             default: () => []
         }
     })
     const router = useRouter()
-    const gotoDetail = (id) =>{
+    const gotoDetail = (id: any) =>{
         router.push('/task/details/'+id)
     }
 </script>

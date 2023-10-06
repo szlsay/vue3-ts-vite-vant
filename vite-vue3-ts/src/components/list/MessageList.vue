@@ -2,7 +2,7 @@
     import {useRouter} from 'vue-router'
     const props = defineProps({
         messageList: {
-            type: Array,
+            type: Array<any>,
             default: () => []
         },
         type: {
@@ -10,7 +10,7 @@
         }
     })
     const router = useRouter()
-    const gotoDetail = (item) =>{
+    const gotoDetail = (item: any) =>{
         if(props.type === 'system'){
             router.push('/message/systemList')
         }

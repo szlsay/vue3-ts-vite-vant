@@ -4,7 +4,7 @@
     const store = userStore()
     const route = useRoute()
     const router = useRouter()
-    const gotoPage = (path) =>{
+    const gotoPage = (path: any) =>{
         router.push(path)
     }
 </script>

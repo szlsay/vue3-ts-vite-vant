@@ -66,10 +66,10 @@
   </div>
 </template>
 <style scoped>
-  >>>.van-nav-bar__content{
+  :deep(.van-nav-bar__content){
     background: #FF8E00;
   }
-  >>>.van-nav-bar__title,>>>.van-icon-arrow-left:before{
+  :deep(.van-nav-bar__title), :deep(.van-icon-arrow-left:before){
     color: #ffffff;
   }
   .advance{

@@ -1,14 +1,14 @@
 <script setup lang="ts">
     import {useRouter} from 'vue-router'
     import ProgressBar from '@/components/ProgressBar.vue'
-    const props = defineProps({
+    defineProps({
         contractList: {
-            type: Array,
+            type: Array<any>,
             default: () => []
         }
     })
     const router = useRouter()
-    const gotoDetail = (id) =>{
+    const gotoDetail = (id: any) =>{
         router.push('/contract/details/'+id)
     }
 </script>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-    const props = defineProps({
+    defineProps({
         item: {
-            type: Object
+            type: Object,
+            default: () => {}
         }
     })
-    const contractState = (index) => {
+    const contractState = (index: any) => {
         if(index === 1) return 'green'
         if(index === 2) return 'orange'
         if(index === 3) return 'red'
